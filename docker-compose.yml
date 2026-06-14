@@ -6,3 +6,21 @@ services:
     container_name: devops-flask-app
     ports:
       - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_NAME: devops_db
+      DB_USER: devops_user
+      DB_PASSWORD: devops_pass
+
+  db:
+    image: postgres:15
+    container_name: devops-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: devops_db
+      POSTGRES_USER: devops_user
+      POSTGRES_PASSWORD: devops_pass
+    ports:
+      - "5432:5432"
