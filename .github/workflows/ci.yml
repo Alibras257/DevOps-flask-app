@@ -10,8 +10,29 @@ on:
       - main
 
 jobs:
-  build-and-test:
+  build-test-and-db-check:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: devops_db
+          POSTGRES_USER: devops_user
+          POSTGRES_PASSWORD: devops_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U devops_user -d devops_db"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DB_HOST: localhost
+      DB_NAME: devops_db
+      DB_USER: devops_user
+      DB_PASSWORD: devops_pass
 
     steps:
       - name: Checkout source code
@@ -30,6 +51,10 @@ jobs:
       - name: Run tests
         run: |
           pytest
+
+      - name: Run DB connectivity check
+        run: |
+          python -c "from app import get_db_connection; conn = get_db_connection(); conn.close(); print('Database connection successful')"
 
       - name: Build Docker image
         run: |
