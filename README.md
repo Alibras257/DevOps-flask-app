@@ -1,5 +1,7 @@
 # DevOps Flask App
 
+![CI Pipeline](https://github.com/Alibras257/DevOps-flask-app/actions/workflows/ci.yml/badge.svg)
+
 A production-ready DevOps practice project built with Flask, PostgreSQL, Docker, Docker Compose, GitHub Actions, and Render.
 
 ## Overview
@@ -51,3 +53,58 @@ devops-flask-app/
 ├── .dockerignore
 ├── .gitignore
 └── README.md
+
+
+## Architecture Diagram
+
+```text
+                +----------------------+
+                |      GitHub Repo     |
+                |  Source Code & CI    |
+                +----------+-----------+
+                           |
+                           v
+                +----------------------+
+                |  GitHub Actions CI   |
+                |  - Install deps      |
+                |  - Run tests         |
+                |  - DB connectivity   |
+                |  - Build Docker img  |
+                +----------+-----------+
+                           |
+                           v
+                +----------------------+
+                |    Render Web App    |
+                |   Flask + Gunicorn   |
+                +----------+-----------+
+                           |
+                           v
+                +----------------------+
+                |  Render PostgreSQL   |
+                |   Managed Database   |
+                +----------------------+
+
+
+## Cleaner plain-text version
+
+```md
+## Architecture Overview
+
+- **GitHub Repository**
+  - stores source code
+  - stores Docker configuration
+  - stores GitHub Actions workflow
+
+- **GitHub Actions**
+  - installs dependencies
+  - runs automated tests
+  - checks database connectivity
+  - builds Docker image
+
+- **Render Web Service**
+  - deploys the Flask application
+  - runs the app using Gunicorn
+
+- **Render PostgreSQL**
+  - provides the managed database
+  - connects to the web app using environment variables
